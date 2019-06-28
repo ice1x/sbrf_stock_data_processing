@@ -15,10 +15,10 @@ def checkDB_for_period():
     if conf.candlePeriod == 'H':
         candleDiff = candleDiff * 3600
 
-    print 'Successfully connected'
+    print('Successfully connected')
     tName = conf.insName.lower()
 
-    cmd = 'SELECT * FROM {0} ORDER BY datetimestamp;'.format(tName)
+    cmd = 'SELECT * FROM {0} ORDER BY open_time;'.format(tName)
     cursor.execute(cmd)
 
     lastTimeStamp = datetime.min
@@ -28,7 +28,7 @@ def checkDB_for_period():
         if lastTimeStamp!=datetime.min:
             delta = timeStamp - lastTimeStamp
             if delta != timedelta(seconds=candleDiff):
-                print 'Error: difference in time is ', delta
+                print('Error: difference in time is ', delta)
                 error = True
                 break
         lastTimeStamp = timeStamp
@@ -38,6 +38,6 @@ def checkDB_for_period():
 
 error = checkDB_for_period()
 if not error:
-    print "Database is OK."
+    print("Database is OK.")
 
 

@@ -1,9 +1,17 @@
 class Candle:
-    def __init__(self, datetime, price_open, price_close, price_high, price_low, volume):
+    def __init__(
+            self,
+            open_time,
+            open_price,
+            close_price,
+            high_price,
+            low_price,
+            volume
+    ):
         # https://www.finam.ru/profile/moex-akcii/sberbank/export/
-        self.datetime = datetime
-        self.price_open = price_open
-        self.price_close = price_close
-        self.price_high = price_high
-        self.price_low = price_low
+        self.open_time = open_time
+        self.open_price = open_price
+        self.close_price = close_price
+        self.high_price = high_price
+        self.low_price = low_price
         self.volume = volume

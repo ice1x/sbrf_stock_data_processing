@@ -12,14 +12,14 @@ conf = Config.Config()
 connect = psycopg2.connect(database=dbConf.dbname, user=dbConf.user, host=dbConf.address, password=dbConf.password)
 cursor = connect.cursor()
 
-print 'Successfully connected'
+print('Successfully connected')
 cursor.execute("SELECT * FROM pg_tables WHERE schemaname='public';")
 tables = list()
 for row in cursor:
     tables.append(row[1])
 for name in tables:
     cmd = "DROP TABLE " + name
-    print cmd
+    print(cmd)
     cursor.execute(cmd)
 connect.commit()
 
@@ -34,7 +34,7 @@ cmd = ('CREATE TABLE public."{0}" (' \
 cursor.execute(cmd)
 connect.commit()
 
-print 'Created table', tName
+print('Created table', tName)
 
 downloader = StockDataDownloader.StockDataDownloader()
 oanda = oandapyV20.API(environment=conf.env, access_token=conf.token)
@@ -107,7 +107,7 @@ while date < dateStop - timedelta(seconds=step):
     date = dateTo
 
 cmd = "REINDEX INDEX timestamp_idx;"
-print cmd
+print(cmd)
 cursor.execute(cmd)
 connect.commit()
 

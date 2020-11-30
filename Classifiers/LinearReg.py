@@ -1,11 +1,11 @@
 # logistic regression
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-from PatternsCollector import get_patterns_for_window_and_num, get_x_y_for_patterns
-from sklearn.model_selection import KFold, cross_val_score
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import KFold, cross_val_score
+from sklearn.preprocessing import StandardScaler
 
+from PatternsCollector import get_patterns_for_window_and_num, get_x_y_for_patterns
 
 cr = [10.0 ** i for i in range(-5, 2)]
 i = 0
@@ -23,7 +23,7 @@ for wnd in wrange:
         X_sc = sc.fit_transform(X)
 
         for c in cr:
-            i = i+1
+            i = i + 1
             kf = KFold(n_splits=5, shuffle=True, random_state=100)
             model = LogisticRegression(C=c, random_state=100)
             ms = cross_val_score(model, X_sc, y, cv=kf, scoring='roc_auc')

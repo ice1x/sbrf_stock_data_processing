@@ -1,6 +1,9 @@
-import psycopg2
-from Conf import DbConfig, Config
 from datetime import datetime, timedelta
+
+import psycopg2
+
+from Conf import DbConfig, Config
+
 
 def checkDB_for_period():
     conf = Config.Config()
@@ -25,7 +28,7 @@ def checkDB_for_period():
     error = False
     for row in cursor:
         timeStamp = row[0]
-        if lastTimeStamp!=datetime.min:
+        if lastTimeStamp != datetime.min:
             delta = timeStamp - lastTimeStamp
             if delta != timedelta(seconds=candleDiff):
                 print('Error: difference in time is ', delta)
@@ -36,8 +39,7 @@ def checkDB_for_period():
     connect.close()
     return error
 
+
 error = checkDB_for_period()
 if not error:
     print("Database is OK.")
-
-

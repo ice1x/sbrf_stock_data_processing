@@ -7,11 +7,12 @@ bid - low
 spred = ask-bid
 
 """
+import numpy
 import psycopg2
+
 from Conf import DbConfig, Config
 from Desc.Candle import Candle
 from Desc.Pattern import Pattern
-import numpy
 
 
 def get_patterns_for_window_and_num(window, length, limit=None):
@@ -59,22 +60,22 @@ def get_patterns_for_window_and_num(window, length, limit=None):
                 totalCount,
                 100 * (float(i) / float(totalCount)))
         )
-        if len(wl) == window+length:
+        if len(wl) == window + length:
             # find pattern of 0..length elements
             # that indicates price falls / grows
             # in the next window elements to get profit
-            candle = wl[length-1]
+            candle = wl[length - 1]
             ind = length + 1
             # take real data only
             if candle.volume != 0:
                 while ind <= window + length:
-                    iCandle = wl[ind-1]
+                    iCandle = wl[ind - 1]
                     # define patterns for analyzing iCandle
                     if iCandle.volume != 0:
                         # if iCandle.low_price > candle.high_price:
                         if iCandle.open_price > candle.close_price:
                             # buy pattern
-                            p = Pattern(wl[:length],'buy')
+                            p = Pattern(wl[:length], 'buy')
                             patterns.append(p)
                             indicies.append(ind - length)
                             # profits.append(iCandle.low_price - candle.high_price)
@@ -82,9 +83,8 @@ def get_patterns_for_window_and_num(window, length, limit=None):
                             break
                         # if iCandle.high_price < candle.low_price:
                         if iCandle.close_price < candle.open_price:
-
                             # sell pattern
-                            p = Pattern(wl[:length],'sell')
+                            p = Pattern(wl[:length], 'sell')
                             patterns.append(p)
                             indicies.append(ind - length)
                             # profits.append(candle.low_price - iCandle.high_price)
@@ -109,7 +109,7 @@ def pattern_serie_to_vector(pattern):
     vec = []
     for candle in pattern.serie:
         # vec = numpy.hstack((vec, [(candle.low_price+candle.high_price) / (2 * mean)]))
-        vec = numpy.hstack((vec, [(candle.open_price+candle.close_price) / (2 * mean)]))
+        vec = numpy.hstack((vec, [(candle.open_price + candle.close_price) / (2 * mean)]))
     return vec
 
 

@@ -1,10 +1,10 @@
 # gradient boosting
-import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.model_selection import KFold, cross_val_score
+import numpy as np
 from sklearn.ensemble import GradientBoostingClassifier
-from PatternsCollector import get_patterns_for_window_and_num, get_x_y_for_patterns
+from sklearn.model_selection import KFold, cross_val_score
 
+from PatternsCollector import get_patterns_for_window_and_num, get_x_y_for_patterns
 
 nums = [10, 20, 40, 80, 160, 320]
 i = 0
@@ -20,7 +20,7 @@ for wnd in wrange:
         X, y = get_x_y_for_patterns(patterns, 'buy')
 
         for n in nums:
-            i = i+1
+            i = i + 1
             kf = KFold(n_splits=5, shuffle=True, random_state=100)
             model = GradientBoostingClassifier(n_estimators=n, random_state=100)
             ms = cross_val_score(model, X, y, cv=kf, scoring='roc_auc')

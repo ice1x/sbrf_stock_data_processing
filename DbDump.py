@@ -1,12 +1,13 @@
-import psycopg2
-from StockDataDownloader import StockDataDownloader
-from Conf import DbConfig, Config
 from datetime import datetime, timedelta
-import oandapyV20
-import re
 
-step = 60*360  # download step, s
-daysTotal = 500 # download period, days
+import oandapyV20
+import psycopg2
+
+from Conf import DbConfig, Config
+from StockDataDownloader import StockDataDownloader
+
+step = 60 * 360  # download step, s
+daysTotal = 500  # download period, days
 dbConf = DbConfig.DbConfig()
 conf = Config.Config()
 connect = psycopg2.connect(database=dbConf.dbname, user=dbConf.user, host=dbConf.address, password=dbConf.password)
@@ -39,6 +40,7 @@ print('Created table', tName)
 downloader = StockDataDownloader.StockDataDownloader()
 oanda = oandapyV20.API(environment=conf.env, access_token=conf.token)
 
+
 def parse_date(ts):
     # parse date in RFC3339 format
     """
@@ -55,7 +57,7 @@ def parse_date(ts):
         microsecond=int(broken.group(8) or "0")))
     """
     # parse date in UNIX time stamp
-    return datetime.fromtimestamp(float(ts))
+    return datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f000Z")
 
 
 date = datetime.utcnow() - timedelta(days=daysTotal)
@@ -94,16 +96,16 @@ while date < dateStop - timedelta(seconds=step):
                     md = md + timedelta(seconds=candleDiff)
             """
             volume = candle.get('volume')
-            if volume != 0 and id!=last_id:
+            if volume != 0 and id != last_id:
                 cmd_bulk = cmd_bulk + ("(TIMESTAMP '{0}',{1},{2},{3}),\n"
-                                   .format(id, candle.get('ask')['c'], candle.get('bid')['c'],
-                                           volume))
+                                       .format(id, candle.get('ask')['c'], candle.get('bid')['c'],
+                                               volume))
             last_id = id
         if len(cmd_bulk) > 0:
             cmd = cmd + cmd_bulk[:-2] + ';'
             cursor.execute(cmd)
             connect.commit()
-    print ("Saved candles from {0} to {1}".format(dateFrom, dateTo))
+    print("Saved candles from {0} to {1}".format(dateFrom, dateTo))
     date = dateTo
 
 cmd = "REINDEX INDEX timestamp_idx;"

@@ -21,19 +21,19 @@ def checkDB_for_period():
     print('Successfully connected')
     tName = conf.insName.lower()
 
-    cmd = 'SELECT * FROM {0} ORDER BY open_time;'.format(tName)
+    cmd = 'SELECT * FROM {0} ORDER BY datetimestamp;'.format(tName)
     cursor.execute(cmd)
 
     lastTimeStamp = datetime.min
     error = False
     for row in cursor:
         timeStamp = row[0]
-        if lastTimeStamp != datetime.min:
-            delta = timeStamp - lastTimeStamp
-            if delta != timedelta(seconds=candleDiff):
-                print('Error: difference in time is ', delta)
-                error = True
-                break
+        # if lastTimeStamp != datetime.min:
+        #     delta = timeStamp - lastTimeStamp
+        #     if delta != timedelta(seconds=candleDiff):
+        #         print(f'Error: difference in time is {delta}')
+        #         error = True
+        #         break
         lastTimeStamp = timeStamp
 
     connect.close()

@@ -18,10 +18,7 @@ oanda = oandapyV20.API(
     environment=config.env,
     access_token=config.token
 )
-pReq = PricingInfo(
-    config.account_id,
-    'instruments=' + config.insName
-)
+pReq = PricingInfo(config.account_id, 'instruments=' + config.insName)
 
 asks = list()
 bids = list()
